@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { getProductById } from "../repository/product.repository.js";
 
 const productRouter = Router()
 
@@ -79,7 +80,7 @@ productRouter.post(
 
 productRouter.get(
     '/:product_id', 
-    (request, response) => {
+    async (request, response) => {
         const {product_id} = request.params
 
         if(!product_id){
@@ -89,7 +90,7 @@ productRouter.get(
             })
         }
 
-        const product_found = products.find(product => Number(product.id) === Number(product_id))
+        const product_found = await getProductById(product_id)
 
         if(!product_found){
             return response.status(404).send({
